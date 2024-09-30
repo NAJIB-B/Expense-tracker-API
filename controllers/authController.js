@@ -4,6 +4,7 @@ const jwt = require('jsonwebtoken')
 const catchAsync = require("../utils/catchAsync")
 const AppError = require("../utils/appError")
 const User = require("../models/userModel")
+const Expense = require("../models/expenseModel")
 
 
 exports.protect = catchAsync( async(req, res, next) => {
@@ -33,16 +34,22 @@ exports.protect = catchAsync( async(req, res, next) => {
 })
 
 
-//exports.authorize = catchAsync( async(req, res, next) => {
-//  
-//  const id = req.params.id
-//
-//  const userId = req.user._id
-//
-//
-//
-//  res.status(200).json({
-//    messsage: 'success'
-//  })
-//})
-//
+exports.authorize = catchAsync( async(req, res, next) => {
+  
+  const expense = await Expense.findById(req.params.id)
+
+  if (!expense) {
+    return next(new AppError('No expense found with that ID', 404))
+  }
+
+  const userId = ( req.user._id ).toString()
+
+  
+  if (expense.owner.toString() !== userId) {
+    return next(new AppError('You are not authorized to access this expense', 403))
+  }
+
+
+  next()
+})
+
