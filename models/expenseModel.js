@@ -18,13 +18,13 @@ const expenseSchema = new mongoose.Schema({
   category: {
     type: String,
     enum: [
-      "Groceries",
-      "Leisure",
-      "Electronics",
-      "Utilities",
-      "Clothing",
-      "Health",
-      "Others",
+      "groceries",
+      "leisure",
+      "electronics",
+      "utilities",
+      "clothing",
+      "health",
+      "others",
     ],
     index: 1,
     required: [true, 'An expense must have a category']
