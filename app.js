@@ -15,7 +15,6 @@ app.use('/api/v1/user', userRouter)
 app.use('/api/v1/expense', expenseRouter)
 
 app.use((error, req, res, next)=> {
-  console.log(error)
   res.status(error.statusCode).json({
     error: error.message,
     stack: error.stack

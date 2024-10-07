@@ -30,7 +30,7 @@ exports.createUser = catchAsync( async(req, res, next) => {
 
   const user = await User.create(req.body)
 
-  const token = signToken(user._id)
+  const token = signAccessToken(user._id)
 
   user.password = undefined
 
