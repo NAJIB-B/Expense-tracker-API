@@ -28,6 +28,16 @@ exports.createUser = catchAsync( async(req, res, next) => {
     return next(new AppError(errors, 400))
   }
 
+  if (req.body.password !== req.body.confirmPassword) {
+    return next(
+      new AppError(
+        "The password and confirmPassword field has to be the same",
+        400,
+      ),
+    );
+  }
+
+
   const user = await User.create(req.body)
 
   const token = signAccessToken(user._id)
@@ -35,7 +45,7 @@ exports.createUser = catchAsync( async(req, res, next) => {
   user.password = undefined
 
   res.status(201).json({
-    staus: 'success',
+    status: 'success',
     token,
     user
   })
@@ -53,7 +63,7 @@ exports.login = catchAsync( async(req, res, next) => {
   const user = await User.findOne({email: req.body.email}).select('+password')
 
   if (!user || !( await user.confirmPassword(req.body.password, user.password ))) {
-    return next(new AppError('Email or password is wrong', 400))
+    return next(new AppError('Email or password is wrong', 401))
   }
 
 
@@ -69,7 +79,7 @@ exports.login = catchAsync( async(req, res, next) => {
   user.password = undefined
 
   res.status(200).json({
-    staus: 'success',
+    status: 'success',
     token: accessToken,
     user
   })

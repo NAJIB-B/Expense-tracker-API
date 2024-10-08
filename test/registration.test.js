@@ -80,4 +80,22 @@ describe("User registration endpoint", function() {
     })
 
   } 
+
+  it("Should return 400 for if password and confirmPassword are not the same", function (done) {
+    request(app)
+      .post("/api/v1/user/register")
+    .send({
+      email: "testUser@gmail.com",
+      name: "john doe",
+      password: "test12345",
+      confirmPassword: "test1234"
+    })
+    .expect(400)
+    .end(function (err, res) {
+      if (err) return done(err)
+      done()
+    })
+
+  })    
+
 })

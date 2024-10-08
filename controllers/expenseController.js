@@ -13,7 +13,7 @@ exports.createExpense = catchAsync(async (req, res, next) => {
     return next(new AppError(errors, 400));
   }
 
-  req.body.owner = req.user._id;
+  req.body.owner = req.body.owner || req.user._id;
 
   const expense = await User.create(req.body);
 
@@ -50,6 +50,7 @@ exports.getAllExpense = catchAsync(async (req, res, next) => {
     result: expenses.length,
     expenses,
   });
+
 });
 
 exports.getExpense = catchAsync(async (req, res, next) => {
